@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUYELABS | SECURE GATEWAY</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #050508;
+            --panel-bg: #0c0c12;
+            --border-color: #1a1a2e;
+            --neon-cyan: #00f3ff;
+            --neon-gold: #ffcc00;
+            --neon-green: #00ff66;
+            --neon-red: #ff3333;
+            --text-main: #e0e0e0;
+            --text-dim: #707070;
+            --font-mono: 'Courier New', Courier, monospace;
+        }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-mono); margin: 0; padding: 40px 20px; display: flex; justify-content: center; }
+        .nexus-container { width: 100%; max-width: 600px; }
+        .header { text-align: center; border-bottom: 2px solid var(--neon-cyan); padding-bottom: 20px; margin-bottom: 30px; }
+        .header h1 { color: var(--neon-cyan); margin: 0; font-size: 1.8rem; letter-spacing: 3px; text-transform: uppercase; }
+        .panel { background-color: var(--panel-bg); border: 1px solid var(--border-color); padding: 30px; border-radius: 4px; box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.05); text-align: center; }
+        .auth-link { display: inline-block; color: var(--neon-gold); font-size: 0.8rem; text-decoration: none; border: 1px dashed var(--neon-gold); padding: 5px 10px; margin-bottom: 20px; transition: all 0.2s; }
+        .auth-link:hover { background: var(--neon-gold); color: #000; }
+        .btn-web3 { width: 100%; background: transparent; border: 1px solid var(--neon-cyan); color: var(--neon-cyan); padding: 15px; font-size: 1.1rem; font-family: var(--font-mono); cursor: pointer; text-transform: uppercase; letter-spacing: 2px; margin-top: 20px; transition: all 0.3s; }
+        .btn-web3:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
+        .btn-pay { border-color: var(--neon-gold); color: var(--neon-gold); display: none; }
+        .btn-pay:hover { background: var(--neon-gold); box-shadow: 0 0 15px var(--neon-gold); color: #000; }
+        .status-box { margin-top: 20px; padding: 15px; border: 1px solid #222; font-size: 0.85rem; color: var(--text-dim); text-align: left; height: 120px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <div class="nexus-container">
+        <div class="header">
+            <h1>L2 ACCESS GATEWAY</h1>
+            <div style="color: var(--text-dim); font-size: 0.9rem; margin-top: 10px;">DECENTRALIZED REPOSITORY PROTOCOL</div>
+        </div>
+        
+        <div class="panel">
+            <a href="luyelabs-identity.txt" target="_blank" class="auth-link">[ VERIFY LUYELABS CRYPTOGRAPHIC SIGNATURE ]</a>
+            
+            <p style="line-height: 1.6; font-size: 0.9rem; margin-bottom: 30px;">
+                Access to the secure enclave requires a cryptographic toll transaction on the Base Mainnet.<br><br>
+                <span style="color: var(--neon-gold);">TOLL REQUIREMENT: 10 $RHNT</span>
+            </p>
+
+            <button class="btn-web3" id="btn-connect" onclick="connectWallet()">CONNECT METAMASK</button>
+            <button class="btn-web3 btn-pay" id="btn-pay" onclick="executeToll()">AUTHORIZE $RHNT TOLL</button>
+
+            <div class="status-box" id="status-console">
+                [*] SYSTEM STANDBY. AWAITING WALLET CONNECTION...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TREASURY_ADDRESS = "0x4575815ecf959d38787b4dDed43e1eC1473baaFC";
+        const RHNT_CONTRACT = "0xf1D69a534638F4553834Eb93b2e228e2B626b04B";
+        const TOLL_AMOUNT = "10"; 
+        
+        const ERC20_ABI = ["function transfer(address to, uint256 amount) public returns (bool)"];
+        
+        let provider, signer, userAddress, contract;
+
+        function logStatus(msg, color = 'var(--text-dim)') {
+            const box = document.getElementById('status-console');
+            box.innerHTML += `<br><span style="color: ${color}">> ${msg}</span>`;
+            box.scrollTop = box.scrollHeight;
+        }
+
+        async function connectWallet() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    await provider.send("eth_requestAccounts", []);
+                    signer = provider.getSigner();
+                    userAddress = await signer.getAddress();
+                    
+                    document.getElementById('btn-connect').style.display = 'none';
+                    document.getElementById('btn-pay').style.display = 'block';
+                    
+                    logStatus(`WALLET LINKED: ${userAddress.substring(0,6)}...${userAddress.substring(38)}`, 'var(--neon-cyan)');
+                    logStatus(`Awaiting toll authorization...`);
+                } catch (err) {
+                    logStatus(`CONNECTION REJECTED BY USER.`, 'var(--neon-red)');
+                }
+            } else {
+                logStatus(`CRITICAL FAULT: Web3 Provider (MetaMask) not detected.`, 'var(--neon-red)');
+            }
+        }
+
+        async function executeToll() {
+            try {
+                logStatus(`Initiating Base Mainnet transaction...`, 'var(--neon-gold)');
+                contract = new ethers.Contract(RHNT_CONTRACT, ERC20_ABI, signer);
+                
+                const amountParsed = ethers.utils.parseUnits(TOLL_AMOUNT, 18);
+                
+                const tx = await contract.transfer(TREASURY_ADDRESS, amountParsed);
+                logStatus(`TX SIGNED. AWAITING BLOCK CONSENSUS...`);
+                logStatus(`Hash: ${tx.hash.substring(0,15)}...`);
+                
+                const receipt = await tx.wait();
+                
+                if (receipt.status === 1) {
+                    logStatus(`PAYMENT CONFIRMED. BLOCK: ${receipt.blockNumber}`, 'var(--neon-green)');
+                    logStatus(`Generating access ticket...`);
+                    
+                    setTimeout(() => {
+                        window.location.href = `enclave.html?ticket=${tx.hash}`;
+                    }, 2000);
+                } else {
+                    logStatus(`TRANSACTION FAILED ON CHAIN.`, 'var(--neon-red)');
+                }
+            } catch (err) {
+                logStatus(`TRANSACTION ABORTED: ${err.message.substring(0, 40)}...`, 'var(--neon-red)');
+            }
+        }
+    </script>
+</body>
+</html>
+

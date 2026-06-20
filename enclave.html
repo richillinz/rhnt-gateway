@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUYELABS | SECURE ENCLAVE</title>
+    <style>
+        :root {
+            --bg-color: #050508;
+            --panel-bg: #0c0c12;
+            --border-color: #1a1a2e;
+            --neon-cyan: #00f3ff;
+            --neon-red: #ff3333;
+            --text-main: #e0e0e0;
+            --text-dim: #707070;
+            --font-mono: 'Courier New', Courier, monospace;
+        }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-mono); margin: 0; padding: 40px 20px; display: flex; justify-content: center; }
+        .nexus-container { width: 100%; max-width: 600px; text-align: center; }
+        .panel { background-color: var(--panel-bg); border: 1px solid var(--border-color); padding: 30px; border-radius: 4px; box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.05); }
+        .btn-return { background: transparent; border: 1px solid var(--neon-red); color: var(--neon-red); padding: 15px; font-family: var(--font-mono); cursor: pointer; text-transform: uppercase; margin-top: 20px; transition: all 0.3s; }
+        .btn-return:hover { background: var(--neon-red); color: #000; box-shadow: 0 0 15px var(--neon-red); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="denied-state" class="nexus-container hidden">
+        <h2 style="color: var(--neon-red);">[403] CRYPTOGRAPHIC CLEARANCE DENIED</h2>
+        <p style="color: var(--text-dim);">You must pay the $RHNT toll to enter the Enclave.</p>
+        <button class="btn-return" onclick="window.location.href='index.html'">RETURN TO GATEWAY</button>
+    </div>
+
+    <div id="auth-state" class="nexus-container hidden">
+        <div class="panel">
+            <h2 style="color: var(--neon-cyan);">[ ENCLAVE UNLOCKED ]</h2>
+            <p style="color: var(--text-dim); font-size: 0.85rem; word-break: break-all;">TICKET HASH: <span id="ticket-display"></span></p>
+            
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
+            
+            <p>Welcome to the interior architecture.</p>
+            </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            // Extract the transaction ticket from the URL parameters
+            const params = new URLSearchParams(window.location.search);
+            const ticket = params.get('ticket');
+
+            // Verification Logic: Exists, starts with 0x, exactly 66 characters long
+            if (ticket && ticket.startsWith('0x') && ticket.length === 66) {
+                document.getElementById('ticket-display').innerText = ticket;
+                document.getElementById('auth-state').classList.remove('hidden');
+            } else {
+                // Slam the door
+                document.getElementById('denied-state').classList.remove('hidden');
+            }
+        };
+    </script>
+</body>
+</html>
+

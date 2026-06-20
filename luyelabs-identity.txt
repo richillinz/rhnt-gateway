@@ -1,0 +1,38 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+[==] LUYELABS SECURE REPOSITORY [==]
+ARCHITECT: Richard Christopher Luye (richillinz)
+ORGANIZATION: RCL Integrated Ventures LLC / LuyeLabs
+NETWORK: Base Mainnet
+ASSET: Richnet ($RHNT)
+CONTRACT: 0xf1D69a534638F4553834Eb93b2e228e2B626b04B
+TREASURY: 0x4575815ecf959d38787b4dDed43e1eC1473baaFC
+
+[!] MASTER CRYPTOGRAPHIC NOTICE [!]
+The only authorized and active GPG Key for Richard Luye and LuyeLabs is:
+Key ID: AF1F6AEBDFC6F877
+
+Any other keys previously published to the Ubuntu Keyserver or any legacy SKS
+keyservers under my name or email are hereby declared OBSOLETE, VOID, and
+UNAUTHORIZED for operational use.
+
+This edge node is an official LuyeLabs decentralized access point.
+Transactions executed through this gateway interact directly with the verified $RHNT Master Contract.
+-----BEGIN PGP SIGNATURE-----
+
+iQJPBAEBCAA5FiEEUTGu+oJeq/mTRSwOrx9q69/G+HcFAmo2DkkbFIAAAAAABAAO
+bWFudTIsMi41KzEuMTEsMywyAAoJEK8fauvfxvh3G0IP/iMZxdgTdwYZ6LgzkJiv
+/FtA5u9TNvAkm5M0e4XMu1GtrXcGDLFNJgHBH54htZeDrIa6AqoHQQfR4nnJ9/+K
+kTv0z4lj4E9HXUXZBorWElzgad3xf9iRnkMPrlzQoBcj2DPH+HoCBEzmYcQ4vrfv
+9JFPp8p2ZRFtHId0k2XWKAjDVCyEY8c9+Vt8kTsTmGfiNxmCBIUIh7AHH21YmBwO
+RweQFwsYFVvhUv4fQwCP2Dg27vHYAV/vwYISjqn0z7DeIiPDtjnf2xKwuukPqBSA
+jgk5dh6bWcNaYGJKIh6zetDKHbVBqiBzsbmWZ7S2KzMyfTbMS/HHpTldHqLdelzO
+qdjDU5emTdHYlNU1oqLFTRDv2TbvfFzubKZNnbq+AMN6TQWP8o4AiMq0ZBLUiBZm
+1p9cOn0JoZLT6YJBGwks0UcPxYnIPQIDpgCPWethU6enCq8j7Fcd7w8TUIPVfyaz
+FooVxfgAJNKz+zpSav5SmUP9iKQl/YoWm5yp//ifKK/1YFdb7nqM3sy+4sqlB0RU
+yikOY+m4SqtoUjSB8F+lfMAXySJTwTXF3yMXexP+GZT1GF4g5RAA2Bh8GmKQMJHY
+0tJ/+zJbfRsbzANpex0XoEc8qlISOBzEcCIW/knrfP7bLHS87ItA//fy8KVYwmha
+wxClTLCQHfLbHxFeDoDch8/V
+=UNOO
+-----END PGP SIGNATURE-----
